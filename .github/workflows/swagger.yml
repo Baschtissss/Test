@@ -21,6 +21,9 @@ jobs:
       - name: Install tools
         working-directory: ./Tischreservierung
         run: dotnet tool restore
+      - name: Install NSwag tool
+        working-directory: ./Tischreservierung
+        run: Install-Package NSwag.AspNetCore
       - name: Generate openapi.json
         working-directory: ./Tischreservierung
         run: dotnet nswag run nswag.json
