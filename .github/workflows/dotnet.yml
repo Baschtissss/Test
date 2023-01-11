@@ -22,11 +22,11 @@ jobs:
       with:
         dotnet-version: 6.0.x
     - name: Restore dependencies
-      working-directory: Tischreservierung
+      working-directory: app
       run: dotnet restore
     - name: Build
-      working-directory: Tischreservierug
+      working-directory: app
       run: dotnet build --no-restore
     - name: Test
-      working-directory: Tischreservierung
+      working-directory: app
       run: dotnet test --no-build --verbosity normal
