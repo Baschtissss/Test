@@ -1,4 +1,4 @@
-name: Deploy GitHub Pages
+name: Swagger
 
 on:
   push:
@@ -7,44 +7,18 @@ on:
   workflow_dispatch:
 
 jobs:
-  generate-openapi-spec:
-    runs-on: windows-latest
-    steps:
-      - uses: actions/checkout@v3
-      - name: Setup .NET Core
-        uses: actions/setup-dotnet@v3
-        with:
-          dotnet-version: 6.0.x
-      - name: Install dependencies
-        working-directory: ./Tischreservierung
-        run: dotnet restore
-      - name: Install tools
-        working-directory: ./Tischreservierung
-        run: dotnet tool restore
-      - name: Install NSwag tool
-        working-directory: ./Tischreservierung
-        run: Install-Package NSwag.AspNetCore
-      - name: Generate openapi.json
-        working-directory: ./Tischreservierung
-        run: dotnet nswag run nswag.json
-      - name: Upload openapi.json
-        uses: actions/upload-artifact@v3
-        with:
-          name: spec-file
-          path: openapi.json
   deploy:
-    needs: generate-openapi-spec
     runs-on: ubuntu-latest
     steps:
-      - name: Download openapi.json
-        uses: actions/download-artifact@v3
+      - name: Checkout
+        uses: actions/checkout@v2
+      - name: Swagger ui action
+        id: swagger-ui-action
+        uses: pjoc-team/swagger-ui-action@v0.0.2
         with:
-          name: spec-file
-      - name: Generate Swagger UI
-        uses: Legion2/swagger-ui-action@v1
-        with:
-          output: swagger-ui
-          spec-file: openapi.json
+          dir: './'
+          pattern: '*.json'
+          debug: 'true'
       - name: Deploy to GitHub Pages
         uses: peaceiris/actions-gh-pages@v3
         with:
